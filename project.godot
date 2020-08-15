@@ -30,6 +30,10 @@ config/name="TextQuest"
 run/main_scene="res://engine/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+core="*res://engine/Core.gd"
+
 [display]
 
 window/stretch/mode="viewport"

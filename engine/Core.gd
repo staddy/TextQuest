@@ -16,3 +16,36 @@ static func get_files(path_, ext):
 				ret_val.append(file_name)
 			file_name = dir.get_next()
 	return ret_val
+
+static func evaluate(input):
+	var script = GDScript.new()
+	script.set_source_code("func eval():\n\treturn " + input)
+	script.reload()
+	var obj = Reference.new()
+	obj.set_script(script)
+	return obj.eval()
+
+static func fill_and_evaluate(input, vars):
+	return evaluate(fill_vars(input, vars))
+
+static func fill_vars(input: String, vars: Dictionary):
+	var ret_val = input
+	for v in vars:
+		ret_val.replace("{" + v + "}", str(vars[v]))
+	return ret_val
+
+static func condition_met(object: Dictionary, vars: Dictionary):
+	if (not object.has("condition")) or (object["condition"] == ""):
+		return true
+	return fill_and_evaluate(object["condition"], vars)
+
+static func probability_rolls(object: Dictionary):
+	if (not object.has("p")) or (object["p"] >= 1.0):
+		return true
+	return randf() < object["p"]
+
+static func as_array(object):
+	var ret_val = object
+	if ret_val is Dictionary:
+		ret_val = [ret_val]
+	return ret_val

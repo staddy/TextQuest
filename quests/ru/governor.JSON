@@ -13,25 +13,91 @@
 				{
 					"condition": "",
 					"text": "Здорова, блин!",
-					"result": [
+					"results": [
 						{
 							"condition": "",
-							"p": 1.0,
+							"weight": 1,
 							"next": "1",
 							"vars": [
 								{
 									"condition": "",
+									"p": 1.0,
 									"var": "",
 									"value": "",
 								}
-							]
-						}
-					]
+							],
+						},
+					],
 				},
 				{
 					"text": "Привет...",
+					"results": [
+						{
+							"condition": "",
+							"weight": 1,
+							"next": "1",
+							"vars": [
+								{
+									"condition": "",
+									"p": 1.0,
+									"var": "",
+									"value": "",
+								},
+							],
+						},
+					],
 				},
 			],
 		},
-	}
+		"1": {
+			"text": "Чё делаешб!",
+			"actions": [
+				{
+					"condition": "",
+					"text": "Ничё блин!",
+					"results": [
+						{
+							"condition": "",
+							"weight": 1,
+							"next": "0",
+							"vars": [
+								{
+									"condition": "",
+									"p": 1.0,
+									"var": "",
+									"value": "",
+								}
+							],
+						},
+					],
+				},
+				{
+					"text": "Привет...",
+					"results": [
+						{
+							"condition": "",
+							"weight": 1,
+							"next": "2",
+							"vars": [
+								{
+									"condition": "",
+									"p": 1.0,
+									"var": "",
+									"value": "",
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+		"2": {
+			"text": "Ты чё, дурак, блин?",
+			"actions": [{"text": "Да, блин", "results": {"next": "3"}}, {"text": "Нет", "results": {"next": "0"}}]
+		},
+		"3": {
+			"text": "[color=#99FF99]Вы проиграли[/color]",
+			"actions": [{"text": "Окей, попробуем ещё раз", "results": {"next": "0"}}]
+		},
+	},
 }
