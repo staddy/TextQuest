@@ -4,7 +4,14 @@
 	"author": "staddy",
 	"version": "0.0.1",
 	"vars": {
+		"money": 2000000,
+		"gay": 0,
 	},
+	"status": [
+		"'Ваше состояние:'",
+		"'Ориентация: ' + ('гей' if {gay} else 'натурал')",
+		"'Деньги: {money}'",
+	],
 	"start": "0",
 	"states": {
 		"0": {
@@ -29,6 +36,8 @@
 						},
 					],
 				},
+				{ "text": "[Отобрать рубь]", "vars": {"money": "{money} + 1"}, "results": {"next": "0"},},
+				{ "text": "[Дать рубь]", "vars": {"money": "{money} - 1"}, "results": {"next": "0"},},
 				{
 					"text": "Привет...",
 					"results": [
@@ -93,7 +102,7 @@
 		},
 		"2": {
 			"text": "Ты чё, дурак, блин?",
-			"actions": [{"text": "Да, блин", "results": {"next": "3"}}, {"text": "Нет", "results": {"next": "0"}}]
+			"actions": [{"text": "Да, блин", "vars": {"gay": 1, "money": "{money} - 100000"}, "results": {"next": "3"}}, {"text": "Нет", "results": {"next": "0"}}]
 		},
 		"3": {
 			"text": "[color=#99FF99]Вы проиграли[/color]",

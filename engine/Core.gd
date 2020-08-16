@@ -26,12 +26,12 @@ static func evaluate(input):
 	return obj.eval()
 
 static func fill_and_evaluate(input, vars):
-	return evaluate(fill_vars(input, vars))
+	return evaluate(fill_vars(str(input), vars))
 
 static func fill_vars(input: String, vars: Dictionary):
 	var ret_val = input
 	for v in vars:
-		ret_val.replace("{" + v + "}", str(vars[v]))
+		ret_val = ret_val.replace("{" + v + "}", str(vars[v]))
 	return ret_val
 
 static func condition_met(object: Dictionary, vars: Dictionary):
@@ -46,6 +46,6 @@ static func probability_rolls(object: Dictionary):
 
 static func as_array(object):
 	var ret_val = object
-	if ret_val is Dictionary:
+	if not (ret_val is Array):
 		ret_val = [ret_val]
 	return ret_val

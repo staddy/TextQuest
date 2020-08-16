@@ -21,11 +21,13 @@ position = Vector2( 899.092, 189.135 )
 scale = Vector2( 3.56062, 5.54246 )
 texture = ExtResource( 1 )
 
-[node name="Variables" type="RichTextLabel" parent="."]
+[node name="Status" type="RichTextLabel" parent="."]
 margin_left = 806.53
 margin_top = 369.623
 margin_right = 994.53
 margin_bottom = 595.623
+custom_fonts/normal_font = ExtResource( 3 )
+bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
