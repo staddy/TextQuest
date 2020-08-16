@@ -79,6 +79,9 @@ func process_action(index):
 	if not process_vars(actions[index]):
 		return
 	var results = core.as_array(actions[index]["results"])
+	if results is String:
+		set_state(results)
+		return
 	var possible_results = []
 	var weights = []
 	var sum = 0
