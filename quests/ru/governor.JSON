@@ -16,6 +16,7 @@
 	"states": {
 		"0": {
 			"text": "Привет, Мир!",
+			"image": "../images/2.jpg",
 			"actions": [
 				{
 					"condition": "",

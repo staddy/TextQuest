@@ -36,7 +36,13 @@ func process_status():
 		elif s is Dictionary and s.has("text"):
 			if core.condition_met(s, vars):
 				$Status.bbcode_text += (core.fill_and_evaluate(s["text"], vars) + "\n")
-		
+
+func process_image():
+	if current_state.has("image") and (current_state["image"] is String):
+		if current_state["image"].empty():
+			$Image.texture = null
+		else:
+			$Image.texture = load(core.path + current_state["image"])
 
 func set_state(state_: String):
 	_current_state_key = state_
@@ -48,6 +54,7 @@ func set_state(state_: String):
 		return
 	process_state()
 	process_status()
+	process_image()
 
 func process_state():
 	fill_text()
