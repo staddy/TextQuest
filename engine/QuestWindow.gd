@@ -64,15 +64,16 @@ func fill_text():
 	if not current_state.has("text"):
 		error("The state doesn't have text")
 		return
-	$Text.bbcode_text = current_state["text"]
+	$Text.bbcode_text = core.fill_vars(current_state["text"], vars)
 
 func fill_actions():
 	$Actions.clear()
 	if not current_state.has("actions"):
 		error("The state doesn't have actions")
 		return
-	actions = core.as_array(current_state["actions"])
-	for action in actions:
+	actions = []
+	var actions_ = core.as_array(current_state["actions"])
+	for action in actions_:
 		if core.condition_met(action, vars):
 			if not action.has("text"):
 				error("An action doesn't have text")
@@ -80,15 +81,17 @@ func fill_actions():
 			if not action.has("results"):
 				error("An action doesn't have results")
 				return
-			$Actions.add_item(action["text"])
+			$Actions.add_item(core.fill_vars(action["text"], vars))
+			actions.append(action)
 
 func process_action(index):
 	if not process_vars(actions[index]):
 		return
-	var results = core.as_array(actions[index]["results"])
-	if results is String:
-		set_state(results)
+	var rs = actions[index]["results"]
+	if rs is String:
+		set_state(rs)
 		return
+	var results = core.as_array(rs)
 	var possible_results = []
 	var weights = []
 	var sum = 0
@@ -125,7 +128,8 @@ func process_vars(result):
 		if not vs.has("var"):
 			for v in vs:
 				if v != "":
-					vars[v] = core.fill_and_evaluate(vs[v], vars)
+					var vv = v if v[0] != "{" else core.fill_vars(v, vars)
+					vars[vv] = core.fill_and_evaluate(vs[v], vars)
 			return true
 		else:
 			vs = [vs]
@@ -137,5 +141,6 @@ func process_vars(result):
 		if (not v.has("var")) or (not v.has("value")):
 			error("Error in vars")
 			return false
-		vars[v["var"]] = core.fill_and_evaluate(v["value"], vars)
+		var vv = v["var"] if v["var"][0] != "{" else core.fill_vars(v["var"], vars)
+		vars[vv] = core.fill_and_evaluate(v["value"], vars)
 	return true

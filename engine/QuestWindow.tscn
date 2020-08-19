@@ -8,7 +8,7 @@
 script = ExtResource( 2 )
 
 [node name="Text" type="RichTextLabel" parent="."]
-margin_right = 751.0
+margin_right = 740.0
 margin_bottom = 373.0
 custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
@@ -17,7 +17,7 @@ __meta__ = {
 }
 
 [node name="Image" type="TextureRect" parent="."]
-margin_left = 779.0
+margin_left = 750.0
 margin_top = 1.0
 margin_right = 1020.0
 margin_bottom = 348.0
@@ -29,10 +29,10 @@ __meta__ = {
 }
 
 [node name="Status" type="RichTextLabel" parent="."]
-margin_left = 806.53
-margin_top = 369.623
-margin_right = 994.53
-margin_bottom = 595.623
+margin_left = 754.0
+margin_top = 370.0
+margin_right = 1011.0
+margin_bottom = 596.0
 custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
 __meta__ = {
@@ -42,7 +42,7 @@ __meta__ = {
 [node name="Actions" type="ItemList" parent="."]
 margin_left = 7.0
 margin_top = 383.0
-margin_right = 787.0
+margin_right = 744.0
 margin_bottom = 594.0
 custom_fonts/font = ExtResource( 3 )
 allow_reselect = true

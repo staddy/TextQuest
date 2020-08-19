@@ -1,0 +1,114 @@
+{
+	"name": "Последний Диктатор",
+	"description": "",
+	"author": "staddy",
+	"version": "0.0.1",
+	"vars": {
+		"money": 1000000,
+		"health": "80 + randi() % 20",
+		"center": "11 + randi() % 10",
+		"west": "11 + randi() % 10",
+		"east": "11 + randi() % 10",
+		"admin": "45 + randi() % 10",
+		"hgrades": "\"['при смерти', 'плохое', 'нормальное', 'хорошее', 'отличное']\"",
+		"grades": "\"['ненависть', 'негативное', 'нейтральное', 'любовь', 'обожание']\"",
+		"regions": "\"{'center': 'Центр', 'west': 'Запад', 'east': 'Восток'}\""
+	},
+	"status": [
+		"'Деньги: [color=#A0A0FF]{money}[/color] талон' + ('' if {money} % 10 == 1 else ('а' if {money} % 10 in [2, 3, 4] else 'ов'))",
+		"'Состояние здоровья: [color=#A0A0FF]' + {hgrades}[{health} / 20] + '[/color]'",
+		"'Отношение Центра: [color=#A0A0FF]' + {grades}[{center} / 20] + '[/color]'",
+		"'Отношение Запада: [color=#A0A0FF]' + {grades}[{west} / 20] + '[/color]'",
+		"'Отношение Востока: [color=#A0A0FF]' + {grades}[{east} / 20] + '[/color]'",
+		"'Отношение Администрации: [color=#A0A0FF]' + {grades}[{admin} / 20] + '[/color]'"
+	],
+	"start": "tax_term_0",
+	"states": {
+		"0": {
+			"text": "Привет!\nКак дела?",
+			"image": "../images/2.jpg",
+			"actions": [
+				{
+					"condition": "",
+					"text": "Здорова, блин!",
+					"results": [
+						{
+							"condition": "",
+							"weight": 1,
+							"next": "1",
+							"vars": [
+								{
+									"condition": "",
+									"p": 1.0,
+									"var": "",
+									"value": ""
+								}
+							]
+						}
+					]
+				},
+				{ "condition": "{money} > 100000", "text": "Собирать налоги", "vars": {"money": "{money} + 1"}, "results": {"next": "0"}},
+				{ "text": "[Дать рубь]", "vars": {"money": "{money} - 1"}, "results": {"next": "0"}},
+				{
+					"text": "Привет...",
+					"results": [
+						{
+							"condition": "",
+							"weight": 1,
+							"next": "1",
+							"vars": [
+								{
+									"condition": "",
+									"p": 1.0,
+									"var": "",
+									"value": ""
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		"tax_term_0": {
+			"vars": {
+				"tax_term_text": "'Выберите субъект...' if (({center} > 10) or ({west} > 10) or ({east} > 10)) else 'Нет доступных субъектов!'"
+			},
+			"text": "Вы стоите перед терминалом для сбора налогов.\nНа кинескопе мерцает надпись: [color=#99FF99]\"{tax_term_text}\"[/color]",
+			"actions": [
+				{"condition": "{center} > 10", "text": "Выбрать Центр", "vars": {"tax_term_region": "'center'"}, "results": "tax_term_1"},
+				{"condition": "{west} > 10", "text": "Выбрать Запад", "vars": {"tax_term_region": "'west'"}, "results": "tax_term_1"},
+				{"condition": "{east} > 10", "text": "Выбрать Восток", "vars": {"tax_term_region": "'east'"}, "results": "tax_term_1"},
+				{"text": "Отойти от терминала", "results": "tax_term_0"}
+			]
+		},
+		"tax_term_1": {
+			"vars": {
+				"tax_term_text": "{regions}['{tax_term_region}']"
+			},
+			"text": "Лампы загудели и терминал вывел список доступных действий для субъекта [color=#99FF99]\"{tax_term_text}\"[/color].",
+			"actions": [
+				{"condition": "{{tax_term_region}} > 15", "text": "Собрать налоги со всех",
+				"vars": {"collected": "75000 + randi() % 50000", "money": "{money} + {collected}", "{tax_term_region}": "{{tax_term_region}} - 8 - randi() % 3"}, "results": "tax_term_2"},
+				{"condition": "{{tax_term_region}} > 10", "text": "Собрать налоги только с малого бизнеса",
+				"vars": {"collected": "20000 + randi() % 10000", "money": "{money} + {collected}", "{tax_term_region}": "{{tax_term_region}} - 3 - randi() % 3"}, "results": "tax_term_2"},
+				{"text": "Вернуться к выбору субъекта", "results": "tax_term_0"},
+				{"text": "Отойти от терминала", "results": "tax_term_0"}
+			]
+		},
+		"tax_term_2": {
+			"vars": {
+				"tax_term_text_2": "'{collected} талон' + ('' if {money} % 10 == 1 else ('а' if {money} % 10 in [2, 3, 4] else 'ов'))"
+			},
+			"text": "На экране появилась надпись: [color=#99FF99]\"Вы собрали: {tax_term_text_2}\"[/color].",
+			"actions": [
+				{"condition": "{{tax_term_region}} > 10", "text": "Вернуться к сбору налогов с субъекта {tax_term_text}", "results": "tax_term_1"},
+				{"text": "Вернуться к выбору субъекта", "results": "tax_term_0"},
+				{"text": "Отойти от терминала", "results": "tax_term_0"}
+			]
+		},
+		"3": {
+			"text": "[color=#99FF99]Вы проиграли[/color]",
+			"actions": [{"text": "Окей, попробуем ещё раз", "results": {"next": "0"}}]
+		}
+	}
+}

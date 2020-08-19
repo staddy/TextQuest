@@ -30,8 +30,9 @@ static func fill_and_evaluate(input, vars):
 
 static func fill_vars(input: String, vars: Dictionary):
 	var ret_val = input
-	for v in vars:
-		ret_val = ret_val.replace("{" + v + "}", str(vars[v]))
+	for i in range(0, 2):
+		for v in vars:
+			ret_val = ret_val.replace("{" + v + "}", str(vars[v]))
 	return ret_val
 
 static func condition_met(object: Dictionary, vars: Dictionary):
