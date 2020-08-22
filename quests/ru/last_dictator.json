@@ -10,75 +10,72 @@
 		"west": "11 + randi() % 10",
 		"east": "11 + randi() % 10",
 		"admin": "45 + randi() % 10",
+		"army": "65 + randi() % 10",
 		"hgrades": "\"['при смерти', 'плохое', 'нормальное', 'хорошее', 'отличное']\"",
-		"grades": "\"['ненависть', 'негативное', 'нейтральное', 'любовь', 'обожание']\"",
-		"regions": "\"{'center': 'Центр', 'west': 'Запад', 'east': 'Восток'}\""
+		"grades": "\"['ненависть', 'негативное', 'нейтральное', 'хорошее', 'обожание']\"",
+		"sdays": "\"(('через {days} ' + ('день' if {days} % 10 == 1 else ('дня' if {days} % 10 in [2, 3, 4] else 'дней'))) if {days} > 2 else ['сегодня', 'завтра', 'послезавтра'][{days}])\"",
+		"regions": "\"{'center': 'Центр', 'west': 'Запад', 'east': 'Восток'}\"",
+		"const": 0,
+		"days": 5
 	},
 	"status": [
 		"'Деньги: [color=#A0A0FF]{money}[/color] талон' + ('' if {money} % 10 == 1 else ('а' if {money} % 10 in [2, 3, 4] else 'ов'))",
-		"'Состояние здоровья: [color=#A0A0FF]' + {hgrades}[{health} / 20] + '[/color]'",
+		"'Состояние здоровья: [color=#A0A0FF]' + ('мёртв' if {health} <= 0 else {hgrades}[{health} / 20]) + '[/color]'",
 		"'Отношение Центра: [color=#A0A0FF]' + {grades}[{center} / 20] + '[/color]'",
 		"'Отношение Запада: [color=#A0A0FF]' + {grades}[{west} / 20] + '[/color]'",
 		"'Отношение Востока: [color=#A0A0FF]' + {grades}[{east} / 20] + '[/color]'",
-		"'Отношение Администрации: [color=#A0A0FF]' + {grades}[{admin} / 20] + '[/color]'"
+		"'Отношение Администрации: [color=#A0A0FF]' + {grades}[{admin} / 20] + '[/color]'",
+		"'Отношение Силовиков: [color=#A0A0FF]' + {grades}[{army} / 20] + '[/color]'",
+		{"condition": "{days} >= 0", "text": "'Выборы [color=#A0A0FF]' + {sdays} + '[/color]'"}
 	],
-	"start": "tax_term_0",
+	"start": "cabinet_0",
 	"states": {
-		"0": {
-			"text": "Привет!\nКак дела?",
-			"image": "../images/2.jpg",
+		"cabinet_0": {
+			"vars": {
+				"cabinet_text": "['Взгляд цепляется за картину, изображающую вождя прошлого, произносящего речь с броневика.', 'В поскрипывании кресла вам слышится рёв протестующих.', 'Пахнет чаем с малиновым вареньем.', 'Мерцают газоразрядные индикаторы настольных часов.'][randi() % 4]"
+			},
+			"text": "Вы находитесь в своём скромном кабинете.\n{cabinet_text}",
 			"actions": [
-				{
-					"condition": "",
-					"text": "Здорова, блин!",
-					"results": [
-						{
-							"condition": "",
-							"weight": 1,
-							"next": "1",
-							"vars": [
-								{
-									"condition": "",
-									"p": 1.0,
-									"var": "",
-									"value": ""
-								}
-							]
-						}
-					]
-				},
-				{ "condition": "{money} > 100000", "text": "Собирать налоги", "vars": {"money": "{money} + 1"}, "results": {"next": "0"}},
-				{ "text": "[Дать рубь]", "vars": {"money": "{money} - 1"}, "results": {"next": "0"}},
-				{
-					"text": "Привет...",
-					"results": [
-						{
-							"condition": "",
-							"weight": 1,
-							"next": "1",
-							"vars": [
-								{
-									"condition": "",
-									"p": 1.0,
-									"var": "",
-									"value": ""
-								}
-							]
-						}
-					]
-				}
+				{"text": "Подойти к терминалу для сбора налогов", "results": "tax_term_0"},
+				{"text": "Заказать статистическое исследование", "results": "tax_term_0"},
+				{"text": "Внести правки в Конституцию", "results": "tax_term_0"},
+				{"text": "Отправиться спать", "results": "bed"}
+			]
+		},
+		"const_0": {
+			"vars": {
+				"const_opt_0": "Президента выбирают граждане всех трёх субъектов большинством голосов",
+				"const_opt_1": "Президента выбирают 3 выборщика, граждане каждого субьекта выбирают 1 выборщика",
+				"const_opt_2": "костюм Президента выбирают граждане всех трёх субъектов большинством голосов",
+				"const_text": "['{const_opt_0}', '{const_opt_1}', '{const_opt_2}'][{const}]"
+			},
+			"text": "Вы решили подать заявку в Конституционный Суд на внесение правок в Конституцию.\nВ текущем варианте основного закона закреплено, что {const_text}."
+		},
+		"bed": {
+			"vars": {
+				"days": "{days} - 1",
+				"bed_heal": "(randi() % 5) if ({health} > 15) else (-1 + (randi() % 3))",
+				"bed_act": "['сокрушать врагов государства', 'побеждать', 'действовать'][randi() % 3]",
+				"bed_days": "'' if ({days} < 0) else ('Стоит помнить, что выборы состоятся [color=#A0A0FF]' + {sdays} + '.[/color]')",
+				"bed_text": "'Вы умерли во сне.' if ({bed_heal} < 0) else ('Наступило утро, но вам так и не удалось уснуть.' if ({bed_heal} == 0) else ('Вы хорошо выспались и готовы {bed_act}.\\n{bed_days}'))",
+				"health": "0 if ({bed_heal} < 0) else (clamp({health} + {bed_heal}, 0, 99))"
+			},
+			"text": "{bed_text}",
+			"actions": [
+				{"condition": "{health} <= 0", "text": "Продолжить", "results": "fail"},
+				{"condition": "{health} > 0", "text": "Проследовать в кабинет", "results": "cabinet_0"}
 			]
 		},
 		"tax_term_0": {
 			"vars": {
 				"tax_term_text": "'Выберите субъект...' if (({center} > 10) or ({west} > 10) or ({east} > 10)) else 'Нет доступных субъектов!'"
 			},
-			"text": "Вы стоите перед терминалом для сбора налогов.\nНа кинескопе мерцает надпись: [color=#99FF99]\"{tax_term_text}\"[/color]",
+			"text": "Вы стоите перед терминалом для сбора налогов.\nНа кинескопе сияет надпись: [color=#99FF99]\"{tax_term_text}\"[/color]",
 			"actions": [
 				{"condition": "{center} > 10", "text": "Выбрать Центр", "vars": {"tax_term_region": "'center'"}, "results": "tax_term_1"},
 				{"condition": "{west} > 10", "text": "Выбрать Запад", "vars": {"tax_term_region": "'west'"}, "results": "tax_term_1"},
 				{"condition": "{east} > 10", "text": "Выбрать Восток", "vars": {"tax_term_region": "'east'"}, "results": "tax_term_1"},
-				{"text": "Отойти от терминала", "results": "tax_term_0"}
+				{"text": "Отойти от терминала", "results": "cabinet_0"}
 			]
 		},
 		"tax_term_1": {
@@ -92,7 +89,7 @@
 				{"condition": "{{tax_term_region}} > 10", "text": "Собрать налоги только с малого бизнеса",
 				"vars": {"collected": "20000 + randi() % 10000", "money": "{money} + {collected}", "{tax_term_region}": "{{tax_term_region}} - 3 - randi() % 3"}, "results": "tax_term_2"},
 				{"text": "Вернуться к выбору субъекта", "results": "tax_term_0"},
-				{"text": "Отойти от терминала", "results": "tax_term_0"}
+				{"text": "Отойти от терминала", "results": "cabinet_0"}
 			]
 		},
 		"tax_term_2": {
@@ -103,12 +100,12 @@
 			"actions": [
 				{"condition": "{{tax_term_region}} > 10", "text": "Вернуться к сбору налогов с субъекта {tax_term_text}", "results": "tax_term_1"},
 				{"text": "Вернуться к выбору субъекта", "results": "tax_term_0"},
-				{"text": "Отойти от терминала", "results": "tax_term_0"}
+				{"text": "Отойти от терминала", "results": "cabinet_0"}
 			]
 		},
-		"3": {
-			"text": "[color=#99FF99]Вы проиграли[/color]",
-			"actions": [{"text": "Окей, попробуем ещё раз", "results": {"next": "0"}}]
+		"fail": {
+			"text": "[color=#99FF99]Квест провален[/color]",
+			"actions": [{"text": "...", "results": {"next": "fail"}}]
 		}
 	}
 }
